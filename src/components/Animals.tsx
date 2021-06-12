@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { Animal } from "../models/Animal";
 
@@ -14,14 +15,16 @@ export function Animals() {
             localStorage.setItem("animals", JSON.stringify(response.data));
             setAnimals(response.data);
         })
-    }, []);    
+    }, []);
 
     let animalDiv = animals.map((animal) => {
         return (
-        <div key={animal.id} className="animal">
-            <h3>{animal.name}</h3>
-            <p>{animal.shortDescription}</p>
-        </div>
+            <div key={animal.id} className="animal">
+                <Link to={"/animal/" + animal.id} className="link">
+                    <h3>{animal.name}</h3>
+                    <p>{animal.shortDescription}</p>
+                </Link>
+            </div>
         )
     })
 
