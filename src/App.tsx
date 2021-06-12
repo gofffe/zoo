@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { Header } from './components/Header';
 import { Animals } from './components/Animals';
-import { Animal } from './components/Animal';
+import { OneAnimal } from './components/Animal';
 import { PageNotFound } from './components/PageNotFound';
 
 import './App.css';
@@ -13,9 +13,9 @@ function App() {
     <Router>
       <Header></Header>
       <Switch>
-        <Route exact path="/"><Animals></Animals></Route>
-        <Route path="/animal/:id"><Animal></Animal></Route>
-        <Route path="*"><PageNotFound></PageNotFound></Route>
+        <Route exact path="/"><Animals /></Route>
+        <Route path="/animal/:id"><OneAnimal /></Route>
+        <Route path="*"><PageNotFound /></Route>
       </Switch>
     </Router>
   );
