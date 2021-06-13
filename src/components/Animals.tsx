@@ -11,10 +11,19 @@ export function Animals() {
     const [animals, setAnimals] = useState(initialValue);
 
     useEffect(() => {
-        axios.get<Animal[]>('https://animals.azurewebsites.net/api/animals').then(response => {
-            localStorage.setItem("animals", JSON.stringify(response.data));
-            setAnimals(response.data);
-        })
+        if (!localStorage.getItem("animals")) {
+            axios.get<Animal[]>('https://animals.azurewebsites.net/api/animals').then(response => {
+                localStorage.setItem("animals", JSON.stringify(response.data));
+
+                setAnimals(response.data);
+                console.log("Hämtat från API");
+            })
+        } else {
+            const animalsFromLS = JSON.parse(localStorage.getItem("animals") || "{}");
+
+            setAnimals(animalsFromLS);
+            console.log("Hämtat från LS");
+        }
     }, []);
 
     let animalDiv = animals.map((animal) => {

@@ -11,26 +11,63 @@ interface IParams {
 
 export function OneAnimal() {
   let { id } = useParams<IParams>(); // console.log(id); //varför loggar den id 2 gånger?
-  let idParamAsNr: number = +id;
+  let idAsNumber: number = +id;
 
   let initialValue: Animal = {id: 0, name: '', latinName: '', yearOfBirth: 0, shortDescription: '', longDescription: '', imageUrl: '', medicine: '', isFed: false, lastFed: new Date()};
   const [animal, setAnimal] = useState(initialValue);
 
   let fromLS = localStorage.getItem("animals");
 
+  let formattedDate = (new Date(animal.lastFed)).toLocaleString();
+
+  
   useEffect(() => {
     if (fromLS !== null) {
-      const animals = JSON.parse(fromLS);
-      
-      for (let i = 0; i < animals.length; i++) {
-        if (animals[i].id === idParamAsNr) {
-          setAnimal(animals[i]);
+      const animalsLS = JSON.parse(fromLS);
+      console.log(animalsLS);
+
+      //Time check for when animal was last fed, update LS
+      for (let i = 0; i < animalsLS.length; i++) {
+        if (animalsLS[i].id === idAsNumber) {
+          let now = new Date(); 
+          let lastFed = new Date(animalsLS[i].lastFed);
+          let differenceInMilliSec = now.getTime() - lastFed.getTime();
+          let differenceInHours = Math.floor((differenceInMilliSec / (1000*60*60)) % 24);
+
+          if (differenceInHours >= 3) {
+            console.log("Djuret behöver mat");
+            animalsLS[i].isFed = false;
+
+            localStorage.setItem("animals", JSON.stringify(animalsLS));
+          }
+
+          if (differenceInHours >= 4) {
+            console.log("Djuret säger till dig att den behöver mat");
+            //visa notis om att djuret behöver mat
+          }
+          setAnimal(animalsLS[i]);
         }
       }
-    }    
-  }, [idParamAsNr, fromLS]);
+    }
+  }, [idAsNumber, fromLS]);
 
-  let formattedDate = (new Date(animal.lastFed)).toLocaleString();
+
+  function feedAnimal() {
+    console.log("Du matade djuret");
+    if (fromLS !== null) {
+      const animalsLS = JSON.parse(fromLS);
+      
+      //Change date and boolean if animal is being fed, update LS
+      for (let i = 0; i < animalsLS.length; i++) {
+        if (animalsLS[i].id === idAsNumber) {
+          animalsLS[i].isFed = true;
+          animalsLS[i].lastFed = new Date();
+
+          localStorage.setItem("animals", JSON.stringify(animalsLS));
+        }
+      }
+    }
+  }
 
   return (
     <>
@@ -39,13 +76,13 @@ export function OneAnimal() {
         <div className="image-facts">
           <img src={animal.imageUrl} alt={"Bild på" + animal.name} />
           <div className="facts">
-            <p><strong>Latin:</strong> {animal.latinName}</p>
-            <p><strong>Född:</strong> {animal.yearOfBirth}</p>
+            <p><strong>Latinskt namn:</strong> {animal.latinName}</p>
+            <p><strong>Födelseår:</strong> {animal.yearOfBirth}</p>
             <p><strong>Medicin:</strong> {animal.medicine}</p>
-            <p><strong>Åt senast:</strong> {formattedDate}</p>
+            <p><strong>Matad:</strong> {formattedDate}</p>
           </div>
         </div>
-        <button type="button">Mata mig</button>
+        <button type="button" disabled={animal.isFed === true} onClick={feedAnimal}>Mata mig</button>
         <div className="description">
           <p>{animal.longDescription}</p>
         </div>
