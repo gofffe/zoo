@@ -16,6 +16,10 @@ export function OneAnimal() {
   let initialValue: Animal = {id: 0, name: '', latinName: '', yearOfBirth: 0, shortDescription: '', longDescription: '', imageUrl: '', medicine: '', isFed: false, lastFed: new Date()};
   const [animal, setAnimal] = useState(initialValue);
 
+  const [buttonClass, setButtonClass] = useState("button-disabled");
+  const [notificationClass, setNotificationClass] = useState("notification");
+  const [notification, setNotification] = useState("Jag är mätt och belåten!");
+
   let fromLS = localStorage.getItem("animals");
 
   let formattedDate = (new Date(animal.lastFed)).toLocaleString();
@@ -29,13 +33,17 @@ export function OneAnimal() {
       //Time check for when animal was last fed, update LS
       for (let i = 0; i < animalsLS.length; i++) {
         if (animalsLS[i].id === idAsNumber) {
-          let now = new Date(); 
+          let now = new Date();
           let lastFed = new Date(animalsLS[i].lastFed);
           let differenceInMilliSec = now.getTime() - lastFed.getTime();
           let differenceInHours = Math.floor((differenceInMilliSec / (1000*60*60)) % 24);
 
           if (differenceInHours >= 3) {
             console.log("Djuret behöver mat");
+            setButtonClass("button-enabled");
+            setNotificationClass("notification-yellow");
+            setNotification("Jag är lite hungrig!");
+
             animalsLS[i].isFed = false;
 
             localStorage.setItem("animals", JSON.stringify(animalsLS));
@@ -43,7 +51,8 @@ export function OneAnimal() {
 
           if (differenceInHours >= 4) {
             console.log("Djuret säger till dig att den behöver mat");
-            //visa notis om att djuret behöver mat
+            setNotificationClass("notification-red");
+            setNotification("Jag är jättehungrig!");
           }
           setAnimal(animalsLS[i]);
         }
@@ -60,6 +69,10 @@ export function OneAnimal() {
       //Change date and boolean if animal is being fed, update LS
       for (let i = 0; i < animalsLS.length; i++) {
         if (animalsLS[i].id === idAsNumber) {
+          setButtonClass("button-disabled");
+          setNotificationClass("notification");
+          setNotification("Jag är mätt och belåten!");
+
           animalsLS[i].isFed = true;
           animalsLS[i].lastFed = new Date();
 
@@ -74,7 +87,7 @@ export function OneAnimal() {
       <div className="animal-container">
         <h3>{animal.name}</h3>
         <div className="image-facts">
-          <img src={animal.imageUrl} alt={"Bild på" + animal.name} />
+          <img src={animal.imageUrl} alt={"Bild på " + animal.name} />
           <div className="facts">
             <p><strong>Latinskt namn:</strong> {animal.latinName}</p>
             <p><strong>Födelseår:</strong> {animal.yearOfBirth}</p>
@@ -82,7 +95,8 @@ export function OneAnimal() {
             <p><strong>Matad:</strong> {formattedDate}</p>
           </div>
         </div>
-        <button type="button" disabled={animal.isFed === true} onClick={feedAnimal}>Mata mig</button>
+        <p className={notificationClass}>{notification}</p>
+        <button type="button" className={buttonClass} disabled={animal.isFed === true} onClick={feedAnimal}>Mata mig</button>
         <div className="description">
           <p>{animal.longDescription}</p>
         </div>

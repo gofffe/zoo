@@ -21,6 +21,8 @@ export function Animals() {
         } else {
             const animalsFromLS = JSON.parse(localStorage.getItem("animals") || "{}");
 
+            //loopa och kör en if-sats ifall animal[i].lastFed >= 4, då visas en notis om hunger.
+
             setAnimals(animalsFromLS);
             console.log("Hämtat från LS");
         }
