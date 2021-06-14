@@ -36,7 +36,7 @@ export function OneAnimal() {
           let now = new Date();
           let lastFed = new Date(animalsLS[i].lastFed);
           let differenceInMilliSec = now.getTime() - lastFed.getTime();
-          let differenceInHours = Math.floor((differenceInMilliSec / (1000*60*60)) % 24);
+          let differenceInHours = Math.floor(differenceInMilliSec / (1000*60*60));          
 
           if (differenceInHours >= 3) {
             console.log("Djuret behöver mat");

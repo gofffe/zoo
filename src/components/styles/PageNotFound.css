@@ -1,0 +1,35 @@
+.not-found-container {
+  width: 90%;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 170px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4b674c;
+  color: #182018;
+  border-radius: 15px; }
+  @media screen and (min-width: 1024px) {
+    .not-found-container {
+      width: 70%;
+      min-height: 300px; } }
+  .not-found-container h4 {
+    font-size: 2.5rem;
+    color: #b8b260;
+    margin-bottom: 30px; }
+  .not-found-container p {
+    font-size: 1.2rem;
+    text-align: center;
+    padding: 0 40px; }
+  .not-found-container .link {
+    text-decoration: none;
+    color: #b8b260;
+    margin-top: 30px; }
+    .not-found-container .link:hover {
+      color: #b8b26071; }
+    .not-found-container .link span {
+      font-size: 0.9rem;
+      padding-right: 5px; }
