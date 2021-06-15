@@ -27,6 +27,7 @@
         .link {
             text-decoration: none;
             cursor: pointer;
+            position: relative;
 
             h3 {
                 color: #b8b260;
@@ -44,6 +45,22 @@
                 @media screen and (min-width: 1024px) {
                     padding: 0 50px;    
                 }
+            }
+
+            .notification {
+                position: absolute;
+                top: 2%;
+                right: -1.5%;
+                background-color: red;
+                color: #e6e4cf;
+                font-size: 0.7rem;
+                text-transform: uppercase;
+                border-radius: 15px;
+                padding: 2px 10px 4px 10px;
+            }
+
+            .notification-hidden {
+                visibility: hidden;
             }
         }
     }

@@ -6,7 +6,7 @@ import { Animals } from './components/Animals';
 import { OneAnimal } from './components/Animal';
 import { PageNotFound } from './components/PageNotFound';
 
-import './App.css';
+import './App.scss';
 
 function App() {
   return (

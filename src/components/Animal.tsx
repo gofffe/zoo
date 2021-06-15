@@ -3,14 +3,14 @@ import { useParams } from "react-router";
 
 import { Animal } from "../models/Animal";
 
-import "./styles/Animal.css";
+import "./styles/Animal.scss";
 
 interface IParams {
   id: string;
 }
 
 export function OneAnimal() {
-  let { id } = useParams<IParams>(); // console.log(id); //varför loggar den id 2 gånger?
+  let { id } = useParams<IParams>();
   let idAsNumber: number = +id;
 
   let initialValue: Animal = {id: 0, name: '', latinName: '', yearOfBirth: 0, shortDescription: '', longDescription: '', imageUrl: '', medicine: '', isFed: false, lastFed: new Date()};
@@ -26,9 +26,9 @@ export function OneAnimal() {
 
   
   useEffect(() => {
-    if (fromLS !== null) {
+    if (fromLS) {
       const animalsLS = JSON.parse(fromLS);
-      console.log(animalsLS);
+      //! console.log(animalsLS);
 
       //Time check for when animal was last fed, update LS
       for (let i = 0; i < animalsLS.length; i++) {
@@ -36,10 +36,10 @@ export function OneAnimal() {
           let now = new Date();
           let lastFed = new Date(animalsLS[i].lastFed);
           let differenceInMilliSec = now.getTime() - lastFed.getTime();
-          let differenceInHours = Math.floor(differenceInMilliSec / (1000*60*60));          
-
+          let differenceInHours = Math.floor(differenceInMilliSec / (1000*60*60));
+          
           if (differenceInHours >= 3) {
-            console.log("Djuret behöver mat");
+            //! console.log("Djuret behöver mat");
             setButtonClass("button-enabled");
             setNotificationClass("notification-yellow");
             setNotification("Jag är lite hungrig!");
@@ -50,7 +50,7 @@ export function OneAnimal() {
           }
 
           if (differenceInHours >= 4) {
-            console.log("Djuret säger till dig att den behöver mat");
+            //! console.log("Djuret säger till dig att den behöver mat");
             setNotificationClass("notification-red");
             setNotification("Jag är jättehungrig!");
           }
@@ -62,8 +62,8 @@ export function OneAnimal() {
 
 
   function feedAnimal() {
-    console.log("Du matade djuret");
-    if (fromLS !== null) {
+    //! console.log("Du matade djuret");
+    if (fromLS) {
       const animalsLS = JSON.parse(fromLS);
       
       //Change date and boolean if animal is being fed, update LS
