@@ -1,9 +1,8 @@
-import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { Header } from './components/Header';
 import { Animals } from './components/Animals';
-import { OneAnimal } from './components/Animal';
+import { AnimalDetails } from './components/AnimalDetails';
 import { PageNotFound } from './components/PageNotFound';
 
 import './App.scss';
@@ -14,7 +13,7 @@ function App() {
       <Header></Header>
       <Switch>
         <Route exact path="/"><Animals /></Route>
-        <Route path="/animal/:id"><OneAnimal /></Route>
+        <Route path="/animal/:id"><AnimalDetails /></Route>
         <Route path="*"><PageNotFound /></Route>
       </Switch>
     </Router>

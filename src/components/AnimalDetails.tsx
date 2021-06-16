@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { Redirect } from "react-router-dom";
 
 import { Animal } from "../models/Animal";
 
-import "./styles/Animal.scss";
+import "./styles/AnimalDetails.scss";
 
 interface IParams {
   id: string;
 }
 
-export function OneAnimal() {
+export function AnimalDetails() {
   let { id } = useParams<IParams>();
-  let idAsNumber: number = +id;
 
   let initialValue: Animal = {id: 0, name: '', latinName: '', yearOfBirth: 0, shortDescription: '', longDescription: '', imageUrl: '', medicine: '', isFed: false, lastFed: new Date()};
   const [animal, setAnimal] = useState(initialValue);
@@ -20,26 +20,24 @@ export function OneAnimal() {
   const [notificationClass, setNotificationClass] = useState("notification");
   const [notification, setNotification] = useState("Jag är mätt och belåten!");
 
-  let fromLS = localStorage.getItem("animals");
+  let fromLS: string | null = localStorage.getItem("animals");
 
-  let formattedDate = (new Date(animal.lastFed)).toLocaleString();
+  let formattedDate: string = (new Date(animal.lastFed)).toLocaleString();
 
   
   useEffect(() => {
     if (fromLS) {
-      const animalsLS = JSON.parse(fromLS);
-      //! console.log(animalsLS);
-
-      //Time check for when animal was last fed, update LS
+      const animalsLS: Animal[] = JSON.parse(fromLS);
+ 
       for (let i = 0; i < animalsLS.length; i++) {
-        if (animalsLS[i].id === idAsNumber) {
-          let now = new Date();
-          let lastFed = new Date(animalsLS[i].lastFed);
-          let differenceInMilliSec = now.getTime() - lastFed.getTime();
-          let differenceInHours = Math.floor(differenceInMilliSec / (1000*60*60));
+        if (animalsLS[i].id === +id) {
+          let now: Date = new Date();
+          let lastFed: Date = new Date(animalsLS[i].lastFed);
+          let differenceInMilliSec: number = now.getTime() - lastFed.getTime();
+          let differenceInHours: number = Math.floor(differenceInMilliSec / (1000*60*60));
           
+          //Time check for when animal was last fed, change boolean, update states and LS
           if (differenceInHours >= 3) {
-            //! console.log("Djuret behöver mat");
             setButtonClass("button-enabled");
             setNotificationClass("notification-yellow");
             setNotification("Jag är lite hungrig!");
@@ -48,9 +46,8 @@ export function OneAnimal() {
 
             localStorage.setItem("animals", JSON.stringify(animalsLS));
           }
-
+          //Time check for when animal was last fed, update states
           if (differenceInHours >= 4) {
-            //! console.log("Djuret säger till dig att den behöver mat");
             setNotificationClass("notification-red");
             setNotification("Jag är jättehungrig!");
           }
@@ -58,17 +55,16 @@ export function OneAnimal() {
         }
       }
     }
-  }, [idAsNumber, fromLS]);
+  }, [id, fromLS]);
 
 
   function feedAnimal() {
-    //! console.log("Du matade djuret");
     if (fromLS) {
-      const animalsLS = JSON.parse(fromLS);
+      const animalsLS: Animal[] = JSON.parse(fromLS);
       
-      //Change date and boolean if animal is being fed, update LS
+      //Change date and boolean if animal is being fed, update states and LS
       for (let i = 0; i < animalsLS.length; i++) {
-        if (animalsLS[i].id === idAsNumber) {
+        if (animalsLS[i].id === +id) {
           setButtonClass("button-disabled");
           setNotificationClass("notification");
           setNotification("Jag är mätt och belåten!");
@@ -80,6 +76,10 @@ export function OneAnimal() {
         }
       }
     }
+  }
+
+  if (+id <= 0) {
+    return (<Redirect to="/" />);
   }
 
   return (

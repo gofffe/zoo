@@ -17,23 +17,21 @@ export function Animals() {
                 localStorage.setItem("animals", JSON.stringify(response.data));
 
                 setAnimals(response.data);
-                console.log("Hämtat från API");
             })
         } else {
-            const animalsFromLS = JSON.parse(localStorage.getItem("animals") || "[]");
+            const animalsFromLS: Animal[] = JSON.parse(localStorage.getItem("animals") || "[]");
 
             setAnimals(animalsFromLS);
-            console.log("Hämtat från LS");
         }
     }, []);
 
 
-    let animalDiv = animals.map((animal) => {
-        let now = new Date();
-        let lastFed = new Date(animal.lastFed);
-        let differenceInMilliSec = now.getTime() - lastFed.getTime(); //
-        let differenceInHours = Math.floor(differenceInMilliSec / (1000*60*60));
-        let isStarving = differenceInHours >= 4;
+    let animalContainer = animals.map((animal) => {
+        let now: Date = new Date();
+        let lastFed: Date = new Date(animal.lastFed);
+        let differenceInMilliSec: number = now.getTime() - lastFed.getTime();
+        let differenceInHours: number = Math.floor(differenceInMilliSec / (1000*60*60));
+        let isStarving: boolean = differenceInHours >= 4;
 
         return (
             <div key={animal.id} className="animal">
@@ -48,7 +46,7 @@ export function Animals() {
 
     return (
       <>
-        <div className="animals-container">{animalDiv}</div>
+        <div className="animals-container">{animalContainer}</div>
       </>
     );
 }
